@@ -47,3 +47,25 @@ The tests parse saved sample pages, so they run offline.
   international characters properly)
 - Structuring a small CLI with `argparse`
 - Unit testing parsers against sample fixtures
+
+## Case study
+
+**The problem.** Copying data from a website into a spreadsheet by hand is
+slow and error-prone. A small script should do it in seconds.
+
+**Technologies.** Python 3 standard library only: `urllib.request` to fetch
+pages, `html.parser` to extract the data, `csv` for the output file, and
+`argparse` for the command line. Unit tests run offline against saved sample
+pages.
+
+**The result.** One command turns any number of pages into a clean CSV that
+opens directly in Excel, with correct encoding for international text. The
+scraper identifies itself with an honest User-Agent and waits one second
+between pages, so it never hammers a server.
+
+**Limits (being upfront).** It is built for the two public practice sites;
+pointing it at a new site means writing a new parser class for that site's
+HTML. It does not rotate proxies or work around IP blocks - it avoids
+needing to by being polite, and a production version would add retries,
+caching and configurable delays. It reads static HTML, so pages that render
+their content with JavaScript are out of scope for now.
